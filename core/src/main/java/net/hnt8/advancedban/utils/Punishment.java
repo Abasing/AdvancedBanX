@@ -14,9 +14,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Leoko @ dev.skamps.eu on 30.05.2016.
- */
 public class Punishment {
 
     private static final MethodInterface mi = Universal.get().getMethods();
@@ -147,10 +144,11 @@ public class Punishment {
         List<String> notification = MessageManager.getLayout(mi.getMessages(),
                 getType().getName() + ".Notification",
                 "OPERATOR", getOperator(),
+                "PLAYER", getName(),
+                "NAME", getName(),
                 "PREFIX", mi.getBoolean(mi.getConfig(), "Disable Prefix", false) ? "" : MessageManager.getMessage("General.Prefix"),
                 "DURATION", getDuration(true),
                 "REASON", getReason(),
-                "NAME", getName(),
                 "ID", String.valueOf(id),
                 "HEXID", getHexId(),
                 "DATE", getDate(start),
@@ -183,7 +181,7 @@ public class Punishment {
 
         if (who != null) {
             String message = MessageManager.getMessage("Un" + getType().getBasic().getConfSection("Notification"),
-                    true, "OPERATOR", who, "NAME", getName());
+                    true, "OPERATOR", who, "PLAYER", getName(), "NAME", getName());
             mi.notify("ab.undoNotify." + getType().getBasic().getName(), Collections.singletonList(message));
 
             Universal.get().getLogger().fine(who + " is deleting a punishment");
@@ -200,6 +198,8 @@ public class Punishment {
                 isLayout ? mi.getLayouts() : mi.getMessages(),
                 isLayout ? "Message." + getReason().split(" ")[0].substring(1) : getType().getName() + ".Layout",
                 "OPERATOR", getOperator(),
+                "PLAYER", getName(),
+                "NAME", getName(),
                 "PREFIX", mi.getBoolean(mi.getConfig(), "Disable Prefix", false) ? "" : MessageManager.getMessage("General.Prefix"),
                 "DURATION", getDuration(false),
                 "REASON", isLayout ? (getReason().split(" ").length < 2 ? "" : getReason().substring(getReason().split(" ")[0].length() + 1)) : getReason(),
